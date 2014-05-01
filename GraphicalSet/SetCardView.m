@@ -32,7 +32,7 @@
     [[UIColor blackColor] setStroke];
     [roundedRect stroke];
     
-    
+
     [self drawSquiggle];
     //---------trial shape----------//
     /*
@@ -76,6 +76,35 @@
     [[UIColor purpleColor] setFill];
     [squiggle fill];
 }
+
+/*
+#define SQUIGGLE_WIDTH 0.12
+#define SQUIGGLE_HEIGHT 0.3
+#define SQUIGGLE_FACTOR 0.8
+#define SYMBOL_LINE_WIDTH 0.02;
+- (void)drawSquiggleAtPoint:(CGPoint)point;
+{
+    CGFloat dx = self.bounds.size.width * SQUIGGLE_WIDTH / 2;
+    CGFloat dy = self.bounds.size.height * SQUIGGLE_HEIGHT / 2;
+    CGFloat dsqx = dx * SQUIGGLE_FACTOR;
+    CGFloat dsqy = dy * SQUIGGLE_FACTOR;
+    UIBezierPath *path = [[UIBezierPath alloc] init];
+    [path moveToPoint:CGPointMake(point.x - dx, point.y - dy)];
+    [path addQuadCurveToPoint:CGPointMake(point.x + dx, point.y - dy)
+                 controlPoint:CGPointMake(point.x - dsqx, point.y - dy - dsqy)];
+    [path addCurveToPoint:CGPointMake(point.x + dx, point.y + dy)
+            controlPoint1:CGPointMake(point.x + dx + dsqx, point.y - dy + dsqy)
+            controlPoint2:CGPointMake(point.x + dx - dsqx, point.y + dy - dsqy)];
+    [path addQuadCurveToPoint:CGPointMake(point.x - dx, point.y + dy)
+                 controlPoint:CGPointMake(point.x + dsqx, point.y + dy + dsqy)];
+    [path addCurveToPoint:CGPointMake(point.x - dx, point.y - dy)
+            controlPoint1:CGPointMake(point.x - dx - dsqx, point.y + dy - dsqy)
+            controlPoint2:CGPointMake(point.x - dx + dsqx, point.y - dy + dsqy)];
+    path.lineWidth = self.bounds.size.width * SYMBOL_LINE_WIDTH;
+    //[self shadePath:path];
+    [path stroke];
+}
+ */
 
 #pragma mark Properties
 
