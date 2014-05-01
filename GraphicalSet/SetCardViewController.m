@@ -55,23 +55,23 @@ static const int SET_CARD_GAME = 1;
 
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card
 {
-    /*
-    SetCard *setCardView = (SetCard *)cardView;
+    
+    SetCardView *setCardView = (SetCardView *)cardView;
     if(setCardView.lastState != card.isChosen) {
-        [UIView transitionWithView:playingCardView
+        [UIView transitionWithView:setCardView
                           duration:0.5
-                           options:UIViewAnimationOptionTransitionFlipFromRight
+                           options:UIViewAnimationOptionTransitionCurlDown
                         animations:^{
                             if (card.isChosen) {
-                                playingCardView.faceUp = true;
+                                setCardView.chosen = true;
                             }else{
-                                playingCardView.faceUp = false;
+                                setCardView.chosen = false;
                             }
                         }
                         completion:nil];
     }
-    playingCardView.lastState = card.isChosen;
-     */
+    setCardView.lastState = card.isChosen;
+    
 }
 
 - (void)setGameMode:(CardMatchingGame *)game
