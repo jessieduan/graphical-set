@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="beg-uD-kaD">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <scenes>
+        <!--Playing Card View Controller - Matchismo-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController id="vXZ-lx-hvc" customClass="PlayingCardViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wMK-pQ-q3x"/>
+                        <viewControllerLayoutGuide type="bottom" id="Msw-f9-oyX"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9a0-w1-Zs8">
+                                <rect key="frame" x="23" y="33" width="274" height="412"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Topbar" translatesAutoresizingMaskIntoConstraints="NO" id="azP-rR-Mmt">
+                                        <rect key="frame" x="-22" y="-21" width="338" height="58"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="agv-6u-yi3">
+                                <rect key="frame" x="214" y="463" width="93" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Redeal" backgroundImage="button">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="redealButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="J5T-nC-2OM"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pee-Bi-nSe">
+                                <rect key="frame" x="20" y="467" width="105" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Matchismo" image="MatchismoTabIcon" id="YeF-VW-xDh"/>
+                    <connections>
+                        <outlet property="scoreLabel" destination="pee-Bi-nSe" id="blQ-Er-PRK"/>
+                        <outlet property="window" destination="9a0-w1-Zs8" id="Rb4-fM-YI0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Mud-Yz-i7G"/>
+                <tapGestureRecognizer id="5To-x1-alp"/>
+                <tapGestureRecognizer id="Khs-iT-0jZ"/>
+                <tapGestureRecognizer id="IMF-Pj-oqv"/>
+                <tapGestureRecognizer id="wNj-cD-9Rj"/>
+                <tapGestureRecognizer id="hI4-0s-ZnI"/>
+                <tapGestureRecognizer id="d5X-UR-80u"/>
+                <tapGestureRecognizer id="OKT-hL-Sjh"/>
+                <tapGestureRecognizer id="RQV-Et-CDn"/>
+                <tapGestureRecognizer id="hPv-0J-A6F"/>
+                <tapGestureRecognizer id="Fhd-wN-F1X"/>
+                <tapGestureRecognizer id="YoG-jf-pUH"/>
+                <tapGestureRecognizer id="mhs-a8-9HP"/>
+                <tapGestureRecognizer id="VEl-X5-l6n"/>
+                <tapGestureRecognizer id="N7D-bx-8tR"/>
+                <tapGestureRecognizer id="WjW-fZ-eeV"/>
+            </objects>
+            <point key="canvasLocation" x="714" y="-586"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="ExS-5r-wZb">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="beg-uD-kaD" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="yVC-8P-i7U">
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="viewControllers" id="lmZ-jo-2lQ"/>
+                        <segue destination="5Eg-D0-CUc" kind="relationship" relationship="viewControllers" id="sIw-ap-lmY"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="O2p-51-D9p" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="178" y="-206"/>
+        </scene>
+        <!--Set Card View Controller - Set-->
+        <scene sceneID="X7b-Rn-Lb9">
+            <objects>
+                <viewController id="5Eg-D0-CUc" customClass="SetCardViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="N5O-Vz-IZH"/>
+                        <viewControllerLayoutGuide type="bottom" id="fHG-WE-VsJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="xON-Tq-LcP">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nZw-72-q2B">
+                                <rect key="frame" x="25" y="28" width="271" height="409"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Set" image="SetTabIcon" id="Gib-pn-06I"/>
+                    <connections>
+                        <outlet property="window" destination="nZw-72-q2B" id="U1o-WC-m2j"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8uW-af-1bY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="709" y="80"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="MatchismoTabIcon" width="30" height="30"/>
+        <image name="SetTabIcon" width="30" height="30"/>
+        <image name="Topbar" width="165" height="27"/>
+        <image name="button" width="200" height="36"/>
+    </resources>
+    <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>
