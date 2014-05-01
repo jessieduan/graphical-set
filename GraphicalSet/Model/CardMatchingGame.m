@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
 @property (nonatomic, strong) NSMutableArray *cards;   //of Card
+@property (nonatomic, strong) Deck *deck;
 @end
 
 static const int MISMATCH_PENALTY = 2;
@@ -40,9 +41,11 @@ static const int TWO_OTHER_CARDS = 2;
 {
     self = [super init];
     
+    self.deck = deck;
+    
     if(self){
         for (int i=0; i<count; i++) {
-            Card *card = [deck drawRandomCard];
+            Card *card = [self.deck drawRandomCard];
             if(card){
                 [self.cards addObject:card];
             }else{
@@ -134,9 +137,13 @@ static const int TWO_OTHER_CARDS = 2;
         if (matchScore) {                                   //if there is a match
             self.addedPoints = matchScore * MATCH_BONUS;    //update addedPoints (plus pts * bonus) and game score
             self.score += matchScore * MATCH_BONUS;
-            card.matched = YES;                             //set all 3 cards as matched
-            otherCard1.matched = YES;
-            otherCard2.matched = YES;
+//            card.matched = YES;                             //set all 3 cards as matched
+//            otherCard1.matched = YES;
+//            otherCard2.matched = YES;
+            
+            [self replaceCard:card];
+            [self replaceCard:otherCard1];
+            [self replaceCard:otherCard2];
         }else{                                              //else
             self.addedPoints = MISMATCH_PENALTY;            //update addedPoints (penalty) and game score
             self.score -= MISMATCH_PENALTY;
@@ -144,7 +151,16 @@ static const int TWO_OTHER_CARDS = 2;
             otherCard2.chosen = NO;
         }
     }
+}
 
+- (void)replaceCard:(Card *)toReplace {
+    for (int i = 0; i < [self.cards count]; i++) {
+        if ([self.cards[i] isEqual:toReplace]) {
+            self.cards[i] = [self.deck drawRandomCard];
+            break;
+        }
+    }
+    NSLog(@"ERROR AHHHH CARD NOT FOUND");
 }
 
 - (void)printCards:(NSMutableArray *)cards
