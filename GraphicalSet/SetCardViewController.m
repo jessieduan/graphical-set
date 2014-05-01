@@ -21,7 +21,7 @@ static const int SET_CARD_GAME = 1;
 
 
 #define CELL_ASPECT_RATIO 0.666666666667
-#define NUM_CARDS 16
+#define NUM_CARDS 20
 
 
 - (Deck *)createDeck

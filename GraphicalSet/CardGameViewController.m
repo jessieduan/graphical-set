@@ -102,6 +102,7 @@ static const int PLAYING_CARD_GAME = 0;
 {
     [super viewDidLoad];
     [self initializeCardViews];
+    [self updateUI];
 }
 
 - (void)initializeCardViews
