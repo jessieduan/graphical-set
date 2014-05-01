@@ -33,7 +33,7 @@
     [roundedRect stroke];
     
 
-    [self drawSquiggle];
+    //[self drawSquiggle];
     //---------trial shape----------//
     /*
     CGRect shapeRect = CGRectMake(self.bounds.origin.x+5, self.bounds.origin.y+10, self.bounds.size.width-10, self.bounds.size.height-70);
@@ -60,7 +60,35 @@
 
 }
 
-- (void)drawSquiggle
+- (void)drawSymbols
+{
+    if (self.number==1) {
+        //drawSymbolAtPoint;
+    }else if(self.number==2){
+        //drawSymbolAtPoint;
+        //drawSymbolAtPoint;
+    }else{
+        //drawSymbolAtPoint;
+        //drawSymbolAtPoint;
+        //drawSymbolAtPoint;
+    }
+}
+
+- (void)drawSymbolsAtPoint:(CGPoint)point
+{
+    if (self.symbol==1) {
+        //drawDiamondAtPoint
+    }else if(self.symbol==2){
+        //drawSquiggleAtPoint
+    }else{
+        //drawOvalAtPoint
+    }
+}
+
+//- (void)
+
+#define STARTING_X_FACTOR 0.1
+- (void)drawSquiggleAtPoint:(CGPoint)point
 {
     UIBezierPath *squiggle = [[UIBezierPath alloc] init];
     int currWidth = 70;
@@ -68,7 +96,7 @@
     NSLog(@"Bounds Height: %f", self.bounds.size.height);
     NSLog(@"Bounds Width: %f", self.bounds.size.width);
     
-    [squiggle moveToPoint:CGPointMake(self.bounds.origin.x+(10 * self.bounds.size.width / currWidth), self.bounds.origin.y+(30 * self.bounds.size.height / currHeight))];
+    [squiggle moveToPoint:CGPointMake(self.bounds.origin.x+(STARTING_X_FACTOR * self.bounds.size.width), self.bounds.origin.y+(30 * self.bounds.size.height / currHeight))];
     [squiggle addCurveToPoint:CGPointMake(self.bounds.origin.x+(50 * self.bounds.size.width / currWidth), self.bounds.origin.y+(30 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(self.bounds.origin.x+(25 * self.bounds.size.width / currWidth), self.bounds.origin.y+(15 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(self.bounds.origin.x+(35 * self.bounds.size.width / currWidth), self.bounds.origin.y+(35 * self.bounds.size.height / currHeight))];
     [squiggle addQuadCurveToPoint:CGPointMake(self.bounds.origin.x+(60 * self.bounds.size.width / currWidth), self.bounds.origin.y+(50 * self.bounds.size.height / currHeight)) controlPoint:CGPointMake(self.bounds.origin.x+(80 * self.bounds.size.width / currWidth), self.bounds.origin.y+(22 * self.bounds.size.height / currHeight))];
     [squiggle addCurveToPoint:CGPointMake(self.bounds.origin.x+(20 * self.bounds.size.width / currWidth), self.bounds.origin.y+(50 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(self.bounds.origin.x+(45 * self.bounds.size.width / currWidth), self.bounds.origin.y+(55 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(self.bounds.origin.x+(35 * self.bounds.size.width / currWidth), self.bounds.origin.y+(35 * self.bounds.size.height / currHeight))];
