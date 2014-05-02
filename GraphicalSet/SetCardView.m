@@ -39,17 +39,23 @@
     
     [roundedRect addClip];
     
-    [[UIColor whiteColor] setFill];
-    UIRectFill(self.bounds);
+    //[[UIColor whiteColor] setFill];
+    //UIRectFill(self.bounds);
+    
+    if(self.chosen){
+        [[UIColor orangeColor] setFill];
+        UIRectFill(self.bounds);
+    }else{
+        [[UIColor whiteColor] setFill];
+        UIRectFill(self.bounds);
+    }
     
     [[UIColor blackColor] setStroke];
     [roundedRect stroke];
     
-    //self.color = 3;
-    //self.shading = 2;
-    //self.number = 3;
-    //self.symbol = 3;
     [self drawSymbols];
+    
+    
 }
 
 - (UIColor *)symbolColor
