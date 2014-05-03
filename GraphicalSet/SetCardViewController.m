@@ -55,7 +55,6 @@ static const int SET_CARD_GAME = 1;
 
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card
 {
-    
     SetCardView *setCardView = (SetCardView *)cardView;
     if(setCardView.lastState != card.isChosen) {
         [UIView transitionWithView:setCardView
@@ -71,7 +70,11 @@ static const int SET_CARD_GAME = 1;
                         completion:nil];
     }
     setCardView.lastState = card.isChosen;
-    
+}
+
+- (void)animateCardRemoval:(UIView *)cardView withCard:(Card *)card {
+    SetCardView *setCardView = (SetCardView *)cardView;
+    [UIView transitionWithView:setCardView duration:0.5 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{setCardView.alpha = 0;} completion:nil];
 }
 
 - (void)setGameMode:(CardMatchingGame *)game

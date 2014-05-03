@@ -22,6 +22,10 @@
     return _cards;
 }
 
+- (NSUInteger)cardCount {
+    return [self.cards count];
+}
+
 -(void)addCard: (Card*)card atTop:(BOOL)atTop
 {
     if(atTop){

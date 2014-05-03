@@ -80,6 +80,9 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (void)updateUI
 {
+    if ([self.game.removedCards count]) {
+        [self removeCards];
+    }
     for (UIView *cardView in self.cardViews) {
         cardView.alpha = 1;
         int cardIndex = (int)[self.cardViews indexOfObject:cardView];
@@ -91,6 +94,37 @@ static const int PLAYING_CARD_GAME = 0;
         if (card.isMatched) cardView.alpha = 0.2;  //if cards are matched, make transparent
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
+}
+
+#define REMOVE_DURATION 1.5
+
+- (void)removeCards {
+    NSMutableArray *viewsToRemove = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [self.game.removedCards count]; i++) {
+        int viewIndex = [self.game.removedCardIndices[i] intValue];
+        
+        UIView *cardView = [self.cardViews objectAtIndex:viewIndex];
+        [viewsToRemove addObject:cardView];
+    }
+    [UIView animateWithDuration:REMOVE_DURATION
+                          delay:0
+                        options:0
+                     animations:^{
+                         for (UIView *view in viewsToRemove) {
+                             CGRect frame = CGRectMake(view.frame.origin.x, view.frame.origin.y + [view superview].bounds.size.height, view.frame.size.width, view.frame.size.height);
+                             view.frame = frame;
+                         }
+                     }
+                     completion:^(BOOL finished) {
+                         for (UIView *view in viewsToRemove) {
+                             [view removeFromSuperview];
+                         }
+                     }];
+    
+}
+
+- (void)animateCardRemoval:(UIView *)cardView withCard:(Card *)card {
+    //overridden
 }
 
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card

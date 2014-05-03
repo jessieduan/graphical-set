@@ -19,6 +19,9 @@
 
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic, strong) NSMutableArray *recentCardFlips;
+@property (nonatomic, strong) NSMutableArray *addedCards;
+@property (nonatomic, strong) NSMutableArray *removedCards;
+@property (nonatomic, strong) NSMutableArray *removedCardIndices;
 @property (nonatomic) NSInteger addedPoints;
 @property (nonatomic) NSInteger gameMode;
 
