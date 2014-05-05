@@ -112,13 +112,6 @@ static const int PLAYING_CARD_GAME = 0;
         int cardIndex = (int)[self.cardViews indexOfObject:cardView];
         Card *card = [self.game cardAtIndex:cardIndex];
         
-        if ([card isKindOfClass:[SetCard class]]) {
-            SetCard *cardInArr = (SetCard *)self.game.cards[cardIndex];
-            NSLog(@"cards: %d", cardInArr.symbol);
-            
-            NSLog(@"being drawn: %d", ((SetCard *)card).symbol);
-        }
-        
         [self drawCardView:cardView withCard:card];
         [self animateCardView:cardView withCard:card];
 
@@ -204,15 +197,18 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (void)initializeCardViews
 {
+    int count = 0;
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
             //if ([self.game.cards count] && (r * self.grid.rowCount + c >= [self.game.cards count])) return;
+            if (count >= self.grid.minimumNumberOfCells) return;
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
             
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
             
             [self.window addSubview:cardView];
             [self.cardViews addObject:cardView];
+            count++;
         }
     }
 }
