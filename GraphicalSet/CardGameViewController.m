@@ -19,6 +19,8 @@
 @property (strong, nonatomic) Grid* grid;
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (strong, nonatomic) NSMutableArray *cardViews;
+@property (weak, nonatomic) IBOutlet UIButton *addCardsButton;
+
 @end
 
 static const int PLAYING_CARD_GAME = 0;
@@ -79,18 +81,37 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (IBAction)redealButton:(UIButton *)sender {
     self.game = nil;
+    self.grid = nil;
+    
+    for (UIView *view in self.cardViews) {
+        [view removeFromSuperview];
+    }
+    [self.cardViews removeAllObjects];
+    
+    [self initializeCardViews];
     [self updateUI];
+    
+    self.addCardsButton.alpha = 1.0;
+    self.addCardsButton.enabled = YES;
+    
 }
 
 # define NUM_CARDS_TO_ADD 3
 
-- (IBAction)addCards:(id)sender {
-    [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
-    [self addCardViewsWithCount:NUM_CARDS_TO_ADD];
+- (IBAction)addCards:(UIButton *)sender {
+    int numCardsAdded = [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
+    [self addCardViewsWithCount:numCardsAdded];
     [self setGridMinCells];
     [self updateGrid];
     [self updateUI];
+    
+    if (![self.game numCardsLeft]) {
+        self.addCardsButton.alpha = 0.2;
+        self.addCardsButton.enabled = NO;
+    }
 }
+
+# define ADD_DURATION 1.5
 
 - (void)addCardViewsWithCount:(int)count {
     for(int i = 0; i < count; i++) {
@@ -103,6 +124,12 @@ static const int PLAYING_CARD_GAME = 0;
         [self.window addSubview:cardView];
         [self.cardViews addObject:cardView];
     }
+    
+    [UIView animateWithDuration:ADD_DURATION
+                     animations:^{
+                         [self updateGrid];
+                     }
+                     completion:nil];
 }
 
 - (void)updateUI

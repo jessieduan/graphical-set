@@ -16,8 +16,9 @@
                         usingDeck:(Deck *)deck;
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
-- (void)addCardsWithCount:(NSUInteger)count;
+- (int)addCardsWithCount:(NSUInteger)count;
 - (int)numCardsInPlay;
+- (int)numCardsLeft;
 
 
 @property (nonatomic, readonly) NSInteger score;

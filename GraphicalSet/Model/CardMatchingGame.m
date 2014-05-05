@@ -77,6 +77,10 @@ static const int TWO_OTHER_CARDS = 2;
     return [self.cards count];
 }
 
+- (int)numCardsLeft {
+    return [self.deck cardCount];
+}
+
 
 /* METHOD: chooseCardAtIndex
  * This method is the heart of the program. It decides the state of cards depending on if
@@ -180,13 +184,16 @@ static const int TWO_OTHER_CARDS = 2;
     }
 }
 
-- (void)addCardsWithCount:(NSUInteger)count {
+- (int)addCardsWithCount:(NSUInteger)count {
+    int numAdded = 0;
     for(int i = 0; i < count; i++) {
         if ([self.deck cardCount]){
             Card *newCard = [self.deck drawRandomCard];
             [self.cards addObject:newCard];
+            numAdded++;
         }
     }
+    return numAdded;
 }
 
 - (void)printCards:(NSMutableArray *)cards

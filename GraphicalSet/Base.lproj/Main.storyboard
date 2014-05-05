@@ -146,6 +146,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Set" image="SetTabIcon" id="Gib-pn-06I"/>
                     <connections>
+                        <outlet property="addCardsButton" destination="mdV-9h-4oB" id="Mov-Xa-n0e"/>
                         <outlet property="scoreLabel" destination="ReJ-4p-sVL" id="e94-Aa-fv8"/>
                         <outlet property="window" destination="nZw-72-q2B" id="U1o-WC-m2j"/>
                     </connections>
