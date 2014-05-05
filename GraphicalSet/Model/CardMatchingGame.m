@@ -10,7 +10,6 @@
 
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
-@property (nonatomic, strong) NSMutableArray *cards;   //of Card
 @property (nonatomic, strong) Deck *deck;
 @end
 
@@ -167,7 +166,6 @@ static const int TWO_OTHER_CARDS = 2;
     }
 }
 
-//no longer necessary
 - (void)removeCards:(NSArray *)toRemove {
     [self.removedCards removeAllObjects];
     [self.removedCardIndices removeAllObjects];

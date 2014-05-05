@@ -19,11 +19,6 @@ static const int SET_CARD_GAME = 1;
 
 @implementation SetCardViewController
 
-
-#define CELL_ASPECT_RATIO 0.666666666667
-#define NUM_CARDS 20
-
-
 - (Deck *)createDeck
 {
     return [[SetCardDeck alloc] init];
@@ -34,11 +29,13 @@ static const int SET_CARD_GAME = 1;
     return [[SetCardView alloc] initWithFrame:[grid frameOfCellAtRow:r inColumn:c]];
 }
 
-- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window
-{
+#define CELL_ASPECT_RATIO 0.666666666667
+#define DEFAULT_NUM_CARDS 12
+
+- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window {
     grid.size = CGSizeMake(window.bounds.size.width,window.bounds.size.height);
     grid.cellAspectRatio = CELL_ASPECT_RATIO;
-    grid.minimumNumberOfCells = NUM_CARDS;
+    grid.minimumNumberOfCells = DEFAULT_NUM_CARDS;
 }
 
 - (void)drawCardView:(UIView *)cardView withCard:(Card *)card
