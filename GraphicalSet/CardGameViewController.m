@@ -13,16 +13,40 @@
 #import "SetCard.h" //to remove after debugging
 
 
-@interface CardGameViewController ()
+@interface CardGameViewController () <UIDynamicAnimatorDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UIView *window;
 @property (strong, nonatomic) Grid* grid;
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (strong, nonatomic) NSMutableArray *cardViews;
 @property (weak, nonatomic) IBOutlet UIButton *addCardsButton;
+@property (strong, nonatomic) UIDynamicAnimator *animator;
+//@property (strong, nonatomic) UISnapBehavior *deckSnap;
 @end
 
 @implementation CardGameViewController
+
+/*
+- (UISnapBehavior *)deckSnap
+{
+    _deckSnap = [[UISnapBehavior alloc] initWithItem:self.window snapToPoint:CGPointMake(self.window.bounds.size.width/2, self.window.bounds.size.height/2)];
+    return _deckSnap;
+}
+ */
+/*
+- (UIDynamicAnimator *)animator
+{
+    if (!_animator) {
+        if (self.window) {
+            _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.window];
+            _animator.delegate = self;
+        } else {
+            NSLog(@"Tried to create an animator with no reference view.");
+        }
+    }
+    return _animator;
+}
+ */
 
 - (NSMutableArray *)cardViews
 {
@@ -56,6 +80,34 @@
     return nil;
 }
 
+#define SLOWDOWN_FACTOR 10.0
+- (void)pinch:(UIPinchGestureRecognizer *)gesture
+{
+    if((gesture.state == UIGestureRecognizerStateChanged) ||
+       (gesture.state == UIGestureRecognizerStateEnded)){
+        self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.window];
+        UIDynamicItemBehavior *cardViewItems = [[UIDynamicItemBehavior alloc] initWithItems:self.cardViews];
+        //cardViewItems.resistance = SLOWDOWN_FACTOR;
+        [self.animator addBehavior:cardViewItems];
+        CGPoint center = CGPointMake(self.window.bounds.size.width/2, self.window.bounds.size.height/2);
+        for (UIView* cardView in self.cardViews) {
+            UISnapBehavior *deckSnap = [[UISnapBehavior alloc] initWithItem:cardView snapToPoint:center];
+            [self.animator addBehavior:deckSnap];
+        }
+    }
+}
+
+- (void)pan:(UIPanGestureRecognizer *)gesture
+{
+    
+    if(self.animator){
+        CGPoint gesturePoint = [gesture locationInView:self.view];
+        for(UIView *cardView in self.cardViews){
+            cardView.center = CGPointMake(gesturePoint.x, gesturePoint.y);
+        }
+    }
+}
+
 - (void)drawCardView:(UIView *)cardView withCard:(Card *)card
 {
     //overridden by subclass
@@ -67,11 +119,39 @@
 
 - (void)touch:(UITapGestureRecognizer *)gesture
 {
-    int cardIndex = (int)[self.cardViews indexOfObject:gesture.view];
-    [self setGameMode:self.game];
-    [self.game chooseCardAtIndex:cardIndex];
-    [self removeMatchedCards];
-    [self updateUI];
+    if(!self.animator){
+        int cardIndex = (int)[self.cardViews indexOfObject:gesture.view];
+        [self setGameMode:self.game];
+        [self.game chooseCardAtIndex:cardIndex];
+        [self removeMatchedCards];
+        [self updateUI];
+    }else{
+        [UIView animateWithDuration:0.6
+                              delay:0
+             usingSpringWithDamping:0.5
+              initialSpringVelocity:1
+                            options:UIViewAnimationOptionAllowAnimatedContent
+                         animations:^{
+                             [self updateGrid];
+                         }
+                         completion:nil];
+        self.animator = nil;
+    }
+}
+
+- (void)updateGrid
+{
+    
+    for (int i = 0; i < [self.cardViews count]; i++) {
+        UIView *view = self.cardViews[i];
+        
+        int row = i / self.grid.rowCount;
+        int col = i % self.grid.rowCount;
+        
+        CGRect frame = [self.grid frameOfCellAtRow:row inColumn:col];
+        view.frame = frame;
+        
+    }
 }
 
 - (void)setGameMode:(CardMatchingGame *)game
@@ -110,8 +190,11 @@
 
     self.addCardsButton.alpha = 1.0;
     self.addCardsButton.enabled = YES;
-    
+    self.animator = nil;
 }
+
+
+
 
 # define NUM_CARDS_TO_ADD 3
 
@@ -119,16 +202,29 @@
     int numCardsAdded = [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
     [self addCardViewsWithCount:numCardsAdded];
     [self setGridMinCells];
-    [self updateGrid];
+    //[self updateGrid];
     [self updateUI];
     
     if (![self.game numCardsLeft]) {
         self.addCardsButton.alpha = 0.2;
         self.addCardsButton.enabled = NO;
     }
+    
+    
+    [UIView animateWithDuration:0.6
+                          delay:0
+         usingSpringWithDamping:0.5
+          initialSpringVelocity:1
+                        options:UIViewAnimationOptionAllowAnimatedContent
+                     animations:^{
+                         [self updateGrid];
+                     }
+                     completion:nil];
+    self.animator = nil;
+    NSLog(@"sup");
 }
 
-# define ADD_DURATION 1.5
+# define ADD_DURATION 0.5
 
 - (void)addCardViewsWithCount:(int)count {
     for(int i = 0; i < count; i++) {
@@ -175,19 +271,7 @@
     self.grid.minimumNumberOfCells = [self.game numCardsInPlay];
 }
 
-- (void)updateGrid
-{
-    for (int i = 0; i < [self.cardViews count]; i++) {
-        UIView *view = self.cardViews[i];
-        
-        int row = i / self.grid.rowCount;
-        int col = i % self.grid.rowCount;
-        
-        CGRect frame = [self.grid frameOfCellAtRow:row inColumn:col];
-        view.frame = frame;
-        
-    }
-}
+
 
 #define REMOVE_DURATION 1.5
 
@@ -228,7 +312,7 @@
 }
 
 - (void)animateCardRemoval:(UIView *)cardView withCard:(Card *)card {
-    //overridden
+    //overridden by subclass
 }
 
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card
@@ -240,6 +324,8 @@
 {
     [super viewDidLoad];
     [self initializeCardViews];
+    [self.window addGestureRecognizer:[[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinch:)]];
+    [self.window addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)]];
     [self updateUI];
     
     [self.window.superview setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
@@ -253,7 +339,10 @@
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
             if ((r * self.grid.rowCount + c) >= self.grid.minimumNumberOfCells) return;
+            //start from 0,0
+            //then set new location
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
+            
             
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
             

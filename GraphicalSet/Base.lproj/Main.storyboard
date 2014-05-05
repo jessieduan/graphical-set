@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="beg-uD-kaD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="beg-uD-kaD">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--Playing Card View Controller - Matchismo-->
@@ -48,6 +48,10 @@
                             </label>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081399917603" blue="0.25098040699958801" alpha="1" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="G03-ax-ta5" appends="YES" id="w5P-pB-k3N"/>
+                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" title="Matchismo" image="MatchismoTabIcon" id="YeF-VW-xDh"/>
                     <connections>
@@ -72,6 +76,7 @@
                 <tapGestureRecognizer id="VEl-X5-l6n"/>
                 <tapGestureRecognizer id="N7D-bx-8tR"/>
                 <tapGestureRecognizer id="WjW-fZ-eeV"/>
+                <pinchGestureRecognizer id="G03-ax-ta5"/>
             </objects>
             <point key="canvasLocation" x="714" y="-586"/>
         </scene>
@@ -142,7 +147,7 @@
                                     <constraint firstAttribute="width" constant="86" id="mkQ-nN-gjH"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
