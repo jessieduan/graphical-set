@@ -10,6 +10,7 @@
 #import "PlayingCardView.h"
 #import "CardMatchingGame.h"
 #import "Grid.h"
+#import "SetCard.h" //to remove after debugging
 
 
 @interface CardGameViewController ()
@@ -32,8 +33,10 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (Grid*)grid
 {
-    if (!_grid) _grid = [[Grid alloc] init];
-    [self setGridProperties:_grid withWindow:self.window];
+    if (!_grid) {
+        _grid = [[Grid alloc] init];
+        [self setGridProperties:_grid withWindow:self.window];
+    }
     return _grid;
 }
 
@@ -65,6 +68,7 @@ static const int PLAYING_CARD_GAME = 0;
     int cardIndex = (int)[self.cardViews indexOfObject:gesture.view];
     [self setGameMode:self.game];
     [self.game chooseCardAtIndex:cardIndex];
+    [self removeMatchedCards];
     [self updateUI];
 }
 
@@ -76,6 +80,40 @@ static const int PLAYING_CARD_GAME = 0;
 - (IBAction)redealButton:(UIButton *)sender {
     self.game = nil;
     [self updateUI];
+}
+
+- (IBAction)addCards:(id)sender {
+    NSLog([self.game.cards componentsJoinedByString:@","]);
+    for (int i = 0; i < [self.game.cards count]; i++) {
+        SetCard *card = (SetCard *)self.game.cards[i];
+        NSLog(@"%d", card.symbol);
+    }
+    
+    [self.game addCardsWithCount:3];
+
+    
+//    for (int i = 0; i < [self.game.addedCards count]; i++) {
+//        int row = [self.cardViews count] / self.grid.rowCount;
+//        int col = [self.cardViews count] % self.grid.rowCount;
+//        
+//        UIView *cardView = [self makeCardView:self.grid atRow:row atColumn:col];
+//        
+//        [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
+//        
+//        [self.window addSubview:cardView];
+//        [self.cardViews addObject:cardView];
+//    }
+    
+    [self createGrid];
+    [self.cardViews removeAllObjects];
+    [self initializeCardViews];
+    //[self updateGrid];
+    [self updateUI];
+    NSLog([self.game.cards componentsJoinedByString:@","]);
+    for (int i = 0; i < [self.game.cards count]; i++) {
+        SetCard *card = (SetCard *)self.game.cards[i];
+        NSLog(@"%d", card.symbol);
+    }
 }
 
 - (void)updateUI
@@ -91,6 +129,71 @@ static const int PLAYING_CARD_GAME = 0;
         if (card.isMatched) cardView.alpha = 0.2;  //if cards are matched, make transparent
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
+}
+
+//duplicate to method within setcardviewcontroller
+- (void)createGrid {
+    self.grid.size = CGSizeMake(self.window.bounds.size.width,self.window.bounds.size.height);
+    self.grid.cellAspectRatio = .666666666667;
+    self.grid.minimumNumberOfCells = [self.game.cards count];
+}
+
+- (void)updateGrid
+{
+
+    for (int i = 0; i < [self.cardViews count]; i++) {
+        UIView *view = self.cardViews[i];
+        
+        int row = i / self.grid.rowCount;
+        int col = i % self.grid.rowCount;
+        //NSLog(@"i: %d, row: %d, col: %d", i, row, col);
+        
+        CGRect frame = [self.grid frameOfCellAtRow:row inColumn:col];
+        view.frame = frame;
+        
+    }
+}
+
+#define REMOVE_DURATION 1.5
+
+- (void)removeMatchedCards {
+    if (![self.game.removedCards count]) {
+        return;
+    }
+    NSMutableArray *viewsToRemove = [[NSMutableArray alloc] init];
+    for (int i = 0; i < [self.game.removedCards count]; i++) {
+        int viewIndex = [self.game.removedCardIndices[i] intValue];
+        
+        UIView *cardView = [self.cardViews objectAtIndex:viewIndex];
+        [viewsToRemove addObject:cardView];
+    }
+    NSMutableArray *oldFrames = [[NSMutableArray alloc] init];
+    [UIView animateWithDuration:REMOVE_DURATION
+                     animations:^{
+                         for (UIView *view in viewsToRemove) {
+                             [oldFrames addObject:[NSValue valueWithCGRect:view.frame]];
+                             CGRect frame = CGRectMake(view.frame.origin.x, view.frame.origin.y + [view superview].bounds.size.height, view.frame.size.width, view.frame.size.height);
+                             view.frame = frame;
+                         }
+                     }
+                     completion:^(BOOL finished) {
+                         if (finished) {
+                             for (int i = 0; i < [self.game.removedCards count]; i++) {
+                                 UIView *view = [self.cardViews lastObject];
+                                 [view removeFromSuperview];
+                                 [self.cardViews removeObject:view];
+                             }
+                             [self updateGrid];
+                             [self updateUI];
+                             [self.game.removedCards removeAllObjects];
+                             [self.game.removedCardIndices removeAllObjects];
+                         }
+                         
+                     }];
+}
+
+- (void)animateCardRemoval:(UIView *)cardView withCard:(Card *)card {
+    //overridden
 }
 
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card
@@ -109,10 +212,9 @@ static const int PLAYING_CARD_GAME = 0;
 {
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
+            //if ([self.game.cards count] && (r * self.grid.rowCount + c >= [self.game.cards count])) break;
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
             
-            //CGRect rect = [self.grid frameOfCellAtRow:r inColumn:c];
-            //NSLog(@"%f, %f, %f, %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height);
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
             
             [self.window addSubview:cardView];

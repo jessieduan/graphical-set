@@ -10,7 +10,7 @@
 
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
-@property (nonatomic, strong) NSMutableArray *cards;   //of Card
+@property (nonatomic, strong) Deck *deck;
 @end
 
 static const int MISMATCH_PENALTY = 2;
@@ -34,15 +34,34 @@ static const int TWO_OTHER_CARDS = 2;
     return _recentCardFlips;
 }
 
+- (NSMutableArray *)addedCards
+{
+    if (!_addedCards) _addedCards = [[NSMutableArray alloc] init];
+    return _addedCards;
+}
+
+- (NSMutableArray *)removedCards
+{
+    if (!_removedCards) _removedCards = [[NSMutableArray alloc] init];
+    return _removedCards;
+}
+
+- (NSMutableArray *)removedCardIndices
+{
+    if (!_removedCardIndices) _removedCardIndices = [[NSMutableArray alloc] init];
+    return _removedCardIndices;
+}
 
 - (instancetype)initWithCardCount:(NSUInteger)count
                         usingDeck:(Deck *)deck
 {
     self = [super init];
     
+    self.deck = deck;
+    
     if(self){
         for (int i=0; i<count; i++) {
-            Card *card = [deck drawRandomCard];
+            Card *card = [self.deck drawRandomCard];
             if(card){
                 [self.cards addObject:card];
             }else{
@@ -134,9 +153,10 @@ static const int TWO_OTHER_CARDS = 2;
         if (matchScore) {                                   //if there is a match
             self.addedPoints = matchScore * MATCH_BONUS;    //update addedPoints (plus pts * bonus) and game score
             self.score += matchScore * MATCH_BONUS;
-            card.matched = YES;                             //set all 3 cards as matched
-            otherCard1.matched = YES;
-            otherCard2.matched = YES;
+            
+            
+            [self removeCards:[[NSArray alloc] initWithObjects:card, otherCard1, otherCard2, nil]];
+            
         }else{                                              //else
             self.addedPoints = MISMATCH_PENALTY;            //update addedPoints (penalty) and game score
             self.score -= MISMATCH_PENALTY;
@@ -144,7 +164,34 @@ static const int TWO_OTHER_CARDS = 2;
             otherCard2.chosen = NO;
         }
     }
+}
 
+- (void)removeCards:(NSArray *)toRemove {
+    [self.removedCards removeAllObjects];
+    [self.removedCardIndices removeAllObjects];
+    for (int i = 0; i < [toRemove count]; i++) {
+        Card *card = [toRemove objectAtIndex:i];
+        for (int j = 0; j < [self.cards count]; j++) {
+            if ([self.cards[j] isEqual:card]) {
+                [self.removedCards addObject:card];
+                [self.removedCardIndices addObject:[NSNumber numberWithInt:j]];
+            }
+        }
+    }
+    for (Card *card in self.removedCards) {
+        [self.cards removeObject:card];
+    }
+}
+
+- (void)addCardsWithCount:(NSUInteger)count {
+    [self.addedCards removeAllObjects];
+    for(int i = 0; i < count; i++) {
+        if ([self.deck cardCount]){
+            Card *newCard = [self.deck drawRandomCard];
+            [self.cards addObject:newCard];
+            [self.addedCards addObject:newCard];
+        }
+    }
 }
 
 - (void)printCards:(NSMutableArray *)cards

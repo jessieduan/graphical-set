@@ -5,19 +5,31 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>EC2AD8E4-6DFF-40F2-97FD-FA31DA11DD68</string>
+
+
+
+	<string>9A9558C2-4CB8-4315-92A5-5D2B52F37432</string>
+
 	<key>IDESourceControlProjectName</key>
 	<string>GraphicalSet</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>48C3C95A-E376-492A-9A92-89DC45C3F9CF</key>
+
+
+
+		<key>C2850FF3-25D6-40C4-9BF5-8357E4C29FFE</key>
+
 		<string>https://github.com/jduan48/graphical-set.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>GraphicalSet.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>48C3C95A-E376-492A-9A92-89DC45C3F9CF</key>
+
+
+
+		<key>C2850FF3-25D6-40C4-9BF5-8357E4C29FFE</key>
+
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,16 +37,21 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>48C3C95A-E376-492A-9A92-89DC45C3F9CF</string>
+
+
+
+	<string>C2850FF3-25D6-40C4-9BF5-8357E4C29FFE</string>
+
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>48C3C95A-E376-492A-9A92-89DC45C3F9CF</string>
+
+			<string>C2850FF3-25D6-40C4-9BF5-8357E4C29FFE</string>
 			<key>IDESourceControlWCCName</key>
-			<string>GraphicalSet</string>
+			<string>graphical-set</string>
 		</dict>
 	</array>
 </dict>
