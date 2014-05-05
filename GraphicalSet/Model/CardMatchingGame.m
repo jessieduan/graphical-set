@@ -27,7 +27,6 @@ static const int TWO_OTHER_CARDS = 2;
     return _cards;
 }
 
-
 - (NSMutableArray *)recentCardFlips
 {
     if (!_recentCardFlips) _recentCardFlips = [[NSMutableArray alloc] init];

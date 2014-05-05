@@ -82,37 +82,26 @@ static const int PLAYING_CARD_GAME = 0;
     [self updateUI];
 }
 
-- (IBAction)addCards:(id)sender {
-    NSLog([self.game.cards componentsJoinedByString:@","]);
-    for (int i = 0; i < [self.game.cards count]; i++) {
-        SetCard *card = (SetCard *)self.game.cards[i];
-        NSLog(@"%d", card.symbol);
-    }
-    
-    [self.game addCardsWithCount:3];
+# define NUM_CARDS_TO_ADD 3
 
-    
-//    for (int i = 0; i < [self.game.addedCards count]; i++) {
-//        int row = [self.cardViews count] / self.grid.rowCount;
-//        int col = [self.cardViews count] % self.grid.rowCount;
-//        
-//        UIView *cardView = [self makeCardView:self.grid atRow:row atColumn:col];
-//        
-//        [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
-//        
-//        [self.window addSubview:cardView];
-//        [self.cardViews addObject:cardView];
-//    }
-    
+- (IBAction)addCards:(id)sender {
+    [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
+    [self addCardViewsWithCount:NUM_CARDS_TO_ADD];
     [self createGrid];
-    [self.cardViews removeAllObjects];
-    [self initializeCardViews];
-    //[self updateGrid];
+    [self updateGrid];
     [self updateUI];
-    NSLog([self.game.cards componentsJoinedByString:@","]);
-    for (int i = 0; i < [self.game.cards count]; i++) {
-        SetCard *card = (SetCard *)self.game.cards[i];
-        NSLog(@"%d", card.symbol);
+}
+
+- (void)addCardViewsWithCount:(int)count {
+    for(int i = 0; i < [self.game.addedCards count]; i++) {
+        int row = i / self.grid.rowCount;
+        int col = i % self.grid.rowCount;
+        UIView *cardView = [self makeCardView:self.grid atRow:row atColumn:col];
+        
+        [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
+        
+        [self.window addSubview:cardView];
+        [self.cardViews addObject:cardView];
     }
 }
 
@@ -123,9 +112,16 @@ static const int PLAYING_CARD_GAME = 0;
         int cardIndex = (int)[self.cardViews indexOfObject:cardView];
         Card *card = [self.game cardAtIndex:cardIndex];
         
+        if ([card isKindOfClass:[SetCard class]]) {
+            SetCard *cardInArr = (SetCard *)self.game.cards[cardIndex];
+            NSLog(@"cards: %d", cardInArr.symbol);
+            
+            NSLog(@"being drawn: %d", ((SetCard *)card).symbol);
+        }
+        
         [self drawCardView:cardView withCard:card];
         [self animateCardView:cardView withCard:card];
-        
+
         if (card.isMatched) cardView.alpha = 0.2;  //if cards are matched, make transparent
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
@@ -133,20 +129,18 @@ static const int PLAYING_CARD_GAME = 0;
 
 //duplicate to method within setcardviewcontroller
 - (void)createGrid {
-    self.grid.size = CGSizeMake(self.window.bounds.size.width,self.window.bounds.size.height);
-    self.grid.cellAspectRatio = .666666666667;
+//    self.grid.size = CGSizeMake(self.window.bounds.size.width,self.window.bounds.size.height);
+//    self.grid.cellAspectRatio = .666666666667;
     self.grid.minimumNumberOfCells = [self.game.cards count];
 }
 
 - (void)updateGrid
 {
-
     for (int i = 0; i < [self.cardViews count]; i++) {
         UIView *view = self.cardViews[i];
         
         int row = i / self.grid.rowCount;
         int col = i % self.grid.rowCount;
-        //NSLog(@"i: %d, row: %d, col: %d", i, row, col);
         
         CGRect frame = [self.grid frameOfCellAtRow:row inColumn:col];
         view.frame = frame;
@@ -212,7 +206,7 @@ static const int PLAYING_CARD_GAME = 0;
 {
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
-            //if ([self.game.cards count] && (r * self.grid.rowCount + c >= [self.game.cards count])) break;
+            //if ([self.game.cards count] && (r * self.grid.rowCount + c >= [self.game.cards count])) return;
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
             
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];

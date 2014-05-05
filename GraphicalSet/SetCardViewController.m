@@ -30,7 +30,7 @@ static const int SET_CARD_GAME = 1;
 }
 
 #define CELL_ASPECT_RATIO 0.666666666667
-#define DEFAULT_NUM_CARDS 12
+#define DEFAULT_NUM_CARDS 16
 
 - (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window {
     grid.size = CGSizeMake(window.bounds.size.width,window.bounds.size.height);

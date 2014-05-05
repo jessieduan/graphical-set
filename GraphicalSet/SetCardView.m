@@ -143,8 +143,6 @@
     UIBezierPath *squiggle = [[UIBezierPath alloc] init];
     int currWidth = 70;
     int currHeight = 100;
-    NSLog(@"Bounds Height: %f", self.bounds.size.height);
-    NSLog(@"Bounds Width: %f", self.bounds.size.width);
     
     [squiggle moveToPoint:point];
     [squiggle addCurveToPoint:CGPointMake(point.x+(50 * self.bounds.size.width / currWidth), point.y+(30 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(point.x+(25 * self.bounds.size.width / currWidth), point.y+(15 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(point.x+(35 * self.bounds.size.width / currWidth), point.y+(35 * self.bounds.size.height / currHeight))];
