@@ -20,10 +20,7 @@
 @property (nonatomic, strong) CardMatchingGame *game;
 @property (strong, nonatomic) NSMutableArray *cardViews;
 @property (weak, nonatomic) IBOutlet UIButton *addCardsButton;
-
 @end
-
-static const int PLAYING_CARD_GAME = 0;
 
 @implementation CardGameViewController
 
@@ -64,6 +61,9 @@ static const int PLAYING_CARD_GAME = 0;
     //overridden by subclass
 }
 
+- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int) numCells {
+    //overridden by subclass
+}
 
 - (void)touch:(UITapGestureRecognizer *)gesture
 {
@@ -79,18 +79,35 @@ static const int PLAYING_CARD_GAME = 0;
     //overridden by subclass
 }
 
+# define REDEAL_DURATION 1.5
+# define NUM_REDEAL_CARDS 12
+
 - (IBAction)redealButton:(UIButton *)sender {
     self.game = nil;
     self.grid = nil;
-    
-    for (UIView *view in self.cardViews) {
-        [view removeFromSuperview];
-    }
-    [self.cardViews removeAllObjects];
-    
-    [self initializeCardViews];
-    [self updateUI];
-    
+    [UIView animateWithDuration:REDEAL_DURATION
+                     animations:^{
+                         for (UIView *view in self.cardViews) {
+                             CGRect frame = CGRectMake(view.frame.origin.x, view.frame.origin.y + [view superview].bounds.size.height, view.frame.size.width, view.frame.size.height);
+                             view.frame = frame;
+                         }
+
+                     }
+                     completion:^(BOOL finished){
+                         if (finished) {
+                             for (UIView *view in self.cardViews) {
+                                 [view removeFromSuperview];
+                             }
+                             [self.cardViews removeAllObjects];
+                             
+                             [self setGridProperties:self.grid withWindow:self.window];
+                             //[self updateGrid]; //sets frame for each view
+                             self.game = [[CardMatchingGame alloc] initWithCardCount:NUM_REDEAL_CARDS usingDeck:[self createDeck]];
+                             [self addCardViewsWithCount:NUM_REDEAL_CARDS];
+                         }
+
+                     }];
+
     self.addCardsButton.alpha = 1.0;
     self.addCardsButton.enabled = YES;
     
@@ -115,19 +132,18 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (void)addCardViewsWithCount:(int)count {
     for(int i = 0; i < count; i++) {
-        int row = i / self.grid.rowCount;
-        int col = i % self.grid.rowCount;
-        UIView *cardView = [self makeCardView:self.grid atRow:row atColumn:col];
+        UIView *cardView = [self makeCardView];
+        
         
         [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
         
         [self.window addSubview:cardView];
         [self.cardViews addObject:cardView];
     }
-    
     [UIView animateWithDuration:ADD_DURATION
                      animations:^{
                          [self updateGrid];
+                         [self updateUI];
                      }
                      completion:nil];
 }
@@ -145,6 +161,14 @@ static const int PLAYING_CARD_GAME = 0;
         if (card.isMatched) cardView.alpha = 0.2;  //if cards are matched, make transparent
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
+    NSLog(@"WIDTH: %f", self.window.bounds.size.width);
+    NSLog(@"WIDTH: %f", self.window.bounds.size.height);
+    [self setGridProperties:self.grid withWindow:self.window numCells:[self.game numCardsInPlay]];
+    [self updateUI];
+    //[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 }
 
 - (void)setGridMinCells {
@@ -217,10 +241,15 @@ static const int PLAYING_CARD_GAME = 0;
     [super viewDidLoad];
     [self initializeCardViews];
     [self updateUI];
+    
+    [self.window.superview setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
+    [self.window.superview setAutoresizesSubviews:YES];
 }
+
 
 - (void)initializeCardViews
 {
+    [self.cardViews removeAllObjects];
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
             if ((r * self.grid.rowCount + c) >= self.grid.minimumNumberOfCells) return;
@@ -237,6 +266,10 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (UIView *)makeCardView:(Grid *)grid atRow:(int)r atColumn:(int)c
 {
+    return nil;
+}
+
+- (UIView *)makeCardView {
     return nil;
 }
 

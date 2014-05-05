@@ -29,6 +29,10 @@ static const int PLAYING_CARD_GAME = 0;
     return [[PlayingCardDeck alloc] init];
 }
 
+- (UIView *)makeCardView {
+    return [[PlayingCardView alloc] init];
+}
+
 - (UIView *)makeCardView:(Grid *)grid atRow:(int)r atColumn:(int)c
 {
     return [[PlayingCardView alloc] initWithFrame:[grid frameOfCellAtRow:r inColumn:c]];
@@ -36,9 +40,13 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window
 {
+    [self setGridProperties:grid withWindow:window numCells:NUM_CARDS];
+}
+
+- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int)numCells {
     grid.size = CGSizeMake(window.bounds.size.width,window.bounds.size.height);
     grid.cellAspectRatio = CELL_ASPECT_RATIO;
-    grid.minimumNumberOfCells = NUM_CARDS;
+    grid.minimumNumberOfCells = numCells;
 }
 
 - (void)drawCardView:(UIView *)cardView withCard:(Card *)card

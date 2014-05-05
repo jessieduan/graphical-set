@@ -17,6 +17,8 @@
 - (void)animateCardView:(UIView *)cardView withCard:(Card *)card;
 - (void)setGameMode:(CardMatchingGame *)game;
 - (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window;
+- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int)numCells;
 - (UIView *)makeCardView:(Grid *)grid atRow:(int)r atColumn:(int)c;
+- (UIView *)makeCardView;
 
 @end
