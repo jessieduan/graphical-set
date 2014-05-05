@@ -87,13 +87,13 @@ static const int PLAYING_CARD_GAME = 0;
 - (IBAction)addCards:(id)sender {
     [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
     [self addCardViewsWithCount:NUM_CARDS_TO_ADD];
-    [self createGrid];
+    [self setGridMinCells];
     [self updateGrid];
     [self updateUI];
 }
 
 - (void)addCardViewsWithCount:(int)count {
-    for(int i = 0; i < [self.game.addedCards count]; i++) {
+    for(int i = 0; i < count; i++) {
         int row = i / self.grid.rowCount;
         int col = i % self.grid.rowCount;
         UIView *cardView = [self makeCardView:self.grid atRow:row atColumn:col];
@@ -120,11 +120,8 @@ static const int PLAYING_CARD_GAME = 0;
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
 }
 
-//duplicate to method within setcardviewcontroller
-- (void)createGrid {
-//    self.grid.size = CGSizeMake(self.window.bounds.size.width,self.window.bounds.size.height);
-//    self.grid.cellAspectRatio = .666666666667;
-    self.grid.minimumNumberOfCells = [self.game.cards count];
+- (void)setGridMinCells {
+    self.grid.minimumNumberOfCells = [self.game numCardsInPlay];
 }
 
 - (void)updateGrid
@@ -197,18 +194,15 @@ static const int PLAYING_CARD_GAME = 0;
 
 - (void)initializeCardViews
 {
-    int count = 0;
     for(int r=0; r<self.grid.rowCount; r++){
         for(int c=0; c<self.grid.columnCount; c++){
-            //if ([self.game.cards count] && (r * self.grid.rowCount + c >= [self.game.cards count])) return;
-            if (count >= self.grid.minimumNumberOfCells) return;
+            if ((r * self.grid.rowCount + c) >= self.grid.minimumNumberOfCells) return;
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
             
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
             
             [self.window addSubview:cardView];
             [self.cardViews addObject:cardView];
-            count++;
         }
     }
 }

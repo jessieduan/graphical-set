@@ -17,11 +17,11 @@
 - (void)chooseCardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
 - (void)addCardsWithCount:(NSUInteger)count;
+- (int)numCardsInPlay;
+
 
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic, strong) NSMutableArray *recentCardFlips;
-@property (nonatomic, strong) NSMutableArray *cards;
-@property (nonatomic, strong) NSMutableArray *addedCards;
 @property (nonatomic, strong) NSMutableArray *removedCards;
 @property (nonatomic, strong) NSMutableArray *removedCardIndices;
 @property (nonatomic) NSInteger addedPoints;

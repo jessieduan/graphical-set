@@ -11,6 +11,7 @@
 @interface CardMatchingGame()
 @property (nonatomic, readwrite) NSInteger score;
 @property (nonatomic, strong) Deck *deck;
+@property (nonatomic, strong) NSMutableArray *cards;
 @end
 
 static const int MISMATCH_PENALTY = 2;
@@ -31,12 +32,6 @@ static const int TWO_OTHER_CARDS = 2;
 {
     if (!_recentCardFlips) _recentCardFlips = [[NSMutableArray alloc] init];
     return _recentCardFlips;
-}
-
-- (NSMutableArray *)addedCards
-{
-    if (!_addedCards) _addedCards = [[NSMutableArray alloc] init];
-    return _addedCards;
 }
 
 - (NSMutableArray *)removedCards
@@ -78,6 +73,9 @@ static const int TWO_OTHER_CARDS = 2;
     return (index < [self.cards count]) ? self.cards[index] : nil ;
 }
 
+- (int)numCardsInPlay {
+    return [self.cards count];
+}
 
 
 /* METHOD: chooseCardAtIndex
@@ -183,12 +181,10 @@ static const int TWO_OTHER_CARDS = 2;
 }
 
 - (void)addCardsWithCount:(NSUInteger)count {
-    [self.addedCards removeAllObjects];
     for(int i = 0; i < count; i++) {
         if ([self.deck cardCount]){
             Card *newCard = [self.deck drawRandomCard];
             [self.cards addObject:newCard];
-            [self.addedCards addObject:newCard];
         }
     }
 }
