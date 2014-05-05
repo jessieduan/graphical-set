@@ -132,7 +132,6 @@
                                 </state>
                                 <connections>
                                     <action selector="addCards:" destination="5Eg-D0-CUc" eventType="touchUpInside" id="1gT-d1-PO4"/>
-                                    <action selector="redealButton:" destination="5Eg-D0-CUc" eventType="touchUpInside" id="T3q-RL-55I"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Score: 0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ReJ-4p-sVL">
