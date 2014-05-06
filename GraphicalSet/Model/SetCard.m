@@ -16,10 +16,6 @@
 
 - (int)match:(NSArray *)otherCards  //awards points if there is a proper SET match
 {
-    // for testing
-    return 25;
-    
-    NSLog(@"in set match!");
     int score = 0;
     
     SetCard* a = self;

@@ -21,32 +21,10 @@
 @property (strong, nonatomic) NSMutableArray *cardViews;
 @property (weak, nonatomic) IBOutlet UIButton *addCardsButton;
 @property (strong, nonatomic) UIDynamicAnimator *animator;
-//@property (strong, nonatomic) UISnapBehavior *deckSnap;
+@property (strong, nonatomic) UIAttachmentBehavior *attachment;
 @end
 
 @implementation CardGameViewController
-
-/*
-- (UISnapBehavior *)deckSnap
-{
-    _deckSnap = [[UISnapBehavior alloc] initWithItem:self.window snapToPoint:CGPointMake(self.window.bounds.size.width/2, self.window.bounds.size.height/2)];
-    return _deckSnap;
-}
- */
-/*
-- (UIDynamicAnimator *)animator
-{
-    if (!_animator) {
-        if (self.window) {
-            _animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.window];
-            _animator.delegate = self;
-        } else {
-            NSLog(@"Tried to create an animator with no reference view.");
-        }
-    }
-    return _animator;
-}
- */
 
 - (NSMutableArray *)cardViews
 {
@@ -61,11 +39,6 @@
         [self setGridProperties:_grid withWindow:self.window];
     }
     return _grid;
-}
-
-- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window
-{
-    //overridden by subclass
 }
 
 - (CardMatchingGame *)game
@@ -86,9 +59,9 @@
     if((gesture.state == UIGestureRecognizerStateChanged) ||
        (gesture.state == UIGestureRecognizerStateEnded)){
         self.animator = [[UIDynamicAnimator alloc] initWithReferenceView:self.window];
-        UIDynamicItemBehavior *cardViewItems = [[UIDynamicItemBehavior alloc] initWithItems:self.cardViews];
-        //cardViewItems.resistance = SLOWDOWN_FACTOR;
-        [self.animator addBehavior:cardViewItems];
+        //        UIDynamicItemBehavior *cardViewItems = [[UIDynamicItemBehavior alloc] initWithItems:self.cardViews];
+        //        cardViewItems.resistance = SLOWDOWN_FACTOR;
+        //        [self.animator addBehavior:cardViewItems];
         CGPoint center = CGPointMake(self.window.bounds.size.width/2, self.window.bounds.size.height/2);
         for (UIView* cardView in self.cardViews) {
             UISnapBehavior *deckSnap = [[UISnapBehavior alloc] initWithItem:cardView snapToPoint:center];
@@ -99,8 +72,8 @@
 
 - (void)pan:(UIPanGestureRecognizer *)gesture
 {
-    
     if(self.animator){
+        [self.animator removeAllBehaviors];
         CGPoint gesturePoint = [gesture locationInView:self.view];
         for(UIView *cardView in self.cardViews){
             cardView.center = CGPointMake(gesturePoint.x, gesturePoint.y);
@@ -113,8 +86,16 @@
     //overridden by subclass
 }
 
+#define CELL_ASPECT_RATIO 0.666666666667
+
+- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window {
+    [self setGridProperties:grid withWindow:window numCells:[self defaultNumCards]];
+}
+
 - (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int) numCells {
-    //overridden by subclass
+    grid.size = window.bounds.size;
+    grid.cellAspectRatio = CELL_ASPECT_RATIO;
+    grid.minimumNumberOfCells = numCells;
 }
 
 - (void)touch:(UITapGestureRecognizer *)gesture
@@ -139,18 +120,19 @@
     }
 }
 
+// Sets frame for each card view in self.cardViews
 - (void)updateGrid
 {
-    
     for (int i = 0; i < [self.cardViews count]; i++) {
         UIView *view = self.cardViews[i];
         
-        int row = i / self.grid.rowCount;
-        int col = i % self.grid.rowCount;
+        int row = i / self.grid.columnCount;
+        int col = i % self.grid.columnCount;
         
-        CGRect frame = [self.grid frameOfCellAtRow:row inColumn:col];
+        CGRect frame = [self.grid frameOfCellAtRow:row
+                                          inColumn:col];
+        
         view.frame = frame;
-        
     }
 }
 
@@ -171,7 +153,7 @@
                              CGRect frame = CGRectMake(view.frame.origin.x, view.frame.origin.y + [view superview].bounds.size.height, view.frame.size.width, view.frame.size.height);
                              view.frame = frame;
                          }
-
+                         
                      }
                      completion:^(BOOL finished){
                          if (finished) {
@@ -185,7 +167,7 @@
                              self.game = [[CardMatchingGame alloc] initWithCardCount:NUM_REDEAL_CARDS usingDeck:[self createDeck]];
                              [self addCardViewsWithCount:NUM_REDEAL_CARDS];
                          }
-
+                         
                      }];
 
     self.addCardsButton.alpha = 1.0;
@@ -202,7 +184,6 @@
     int numCardsAdded = [self.game addCardsWithCount:NUM_CARDS_TO_ADD];
     [self addCardViewsWithCount:numCardsAdded];
     [self setGridMinCells];
-    //[self updateGrid];
     [self updateUI];
     
     if (![self.game numCardsLeft]) {
@@ -221,11 +202,10 @@
                      }
                      completion:nil];
     self.animator = nil;
-    NSLog(@"sup");
 }
 
 # define ADD_DURATION 0.5
-
+// Adds card views to self.cardViews and draws them
 - (void)addCardViewsWithCount:(int)count {
     for(int i = 0; i < count; i++) {
         UIView *cardView = [self makeCardView];
@@ -253,19 +233,19 @@
         
         [self drawCardView:cardView withCard:card];
         [self animateCardView:cardView withCard:card];
-
+        
         if (card.isMatched) cardView.alpha = 0.2;  //if cards are matched, make transparent
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", (int)self.game.score];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration {
-    NSLog(@"WIDTH: %f", self.window.bounds.size.width);
-    NSLog(@"WIDTH: %f", self.window.bounds.size.height);
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     [self setGridProperties:self.grid withWindow:self.window numCells:[self.game numCardsInPlay]];
+    [self updateGrid];
     [self updateUI];
-    //[super willAnimateRotationToInterfaceOrientation:interfaceOrientation duration:duration];
 }
+
 
 - (void)setGridMinCells {
     self.grid.minimumNumberOfCells = [self.game numCardsInPlay];
@@ -343,7 +323,6 @@
             //then set new location
             UIView *cardView = [self makeCardView:self.grid atRow:r atColumn:c];
             
-            
             [cardView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(touch:)]];
             
             [self.window addSubview:cardView];
@@ -360,6 +339,10 @@
 
 - (UIView *)makeCardView {
     return nil;
+}
+
+- (int)defaultNumCards {
+    return 12;
 }
 
 

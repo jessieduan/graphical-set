@@ -1,0 +1,3 @@
+user:jduan1 (Duan, Jessie)
+
+Sorry...for some reason prepareForSegue never gets called in my CardGameViewController. I think pretty much everything else for the history is there though.

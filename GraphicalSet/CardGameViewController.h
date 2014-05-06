@@ -20,5 +20,5 @@
 - (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int)numCells;
 - (UIView *)makeCardView:(Grid *)grid atRow:(int)r atColumn:(int)c;
 - (UIView *)makeCardView;
-
+- (int)defaultNumCards;
 @end

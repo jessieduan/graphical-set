@@ -20,10 +20,6 @@ static const int PLAYING_CARD_GAME = 0;
 
 @implementation PlayingCardViewController
 
-#define CELL_ASPECT_RATIO 0.666666666667
-#define NUM_CARDS 20
-
-
 - (Deck *)createDeck
 {
     return [[PlayingCardDeck alloc] init];
@@ -36,17 +32,6 @@ static const int PLAYING_CARD_GAME = 0;
 - (UIView *)makeCardView:(Grid *)grid atRow:(int)r atColumn:(int)c
 {
     return [[PlayingCardView alloc] initWithFrame:[grid frameOfCellAtRow:r inColumn:c]];
-}
-
-- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window
-{
-    [self setGridProperties:grid withWindow:window numCells:NUM_CARDS];
-}
-
-- (void)setGridProperties:(Grid *)grid withWindow:(UIView *)window numCells:(int)numCells {
-    grid.size = CGSizeMake(window.bounds.size.width,window.bounds.size.height);
-    grid.cellAspectRatio = CELL_ASPECT_RATIO;
-    grid.minimumNumberOfCells = numCells;
 }
 
 - (void)drawCardView:(UIView *)cardView withCard:(Card *)card
@@ -83,53 +68,9 @@ static const int PLAYING_CARD_GAME = 0;
     game.gameMode = PLAYING_CARD_GAME;
 }
 
+- (int)defaultNumCards {
+    return 20;
+}
+
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
- {
- self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
- if (self) {
- // Custom initialization
- }
- return self;
- }
- 
- - (void)viewDidLoad
- {
- [super viewDidLoad];
- // Do any additional setup after loading the view.
- }
- 
- - (void)didReceiveMemoryWarning
- {
- [super didReceiveMemoryWarning];
- // Dispose of any resources that can be recreated.
- }
- */

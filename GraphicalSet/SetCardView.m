@@ -69,15 +69,35 @@
     }
 }
 
+#define STRIPES_OFFSET 0.20
+#define SYMBOL_LINE_WIDTH 0.10
 - (void)symbolShading:(UIBezierPath *)symbol
 {
     if (self.shading == 1){
         [[UIColor clearColor] setFill];
-    }else if (self.shading == 2){                //TO DO -> REPLACE WITH STRIPES!!!
-        UIColor *color = [self symbolColor];
-        color = [color colorWithAlphaComponent:0.3];
-        [color setFill];
-        [symbol fill];
+    }else if (self.shading == 2){
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSaveGState(context);
+        //UIColor *color = [self symbolColor];
+        [symbol addClip];
+        
+        UIBezierPath *stripes = [[UIBezierPath alloc] init];
+        CGPoint start = symbol.bounds.origin;
+        CGPoint end = start;
+        CGFloat change = symbol.bounds.size.height * STRIPES_OFFSET;
+        end.x += symbol.bounds.size.width;
+        start.y += change;
+        
+        for(int i=0.1; i<[self symbolHeight]; i=i+0.1*[self symbolHeight]){
+            [stripes moveToPoint:start];
+            [stripes addLineToPoint:end];
+            start.y += change;
+            end.y += change;
+        }
+        stripes.lineWidth = (symbol.bounds.size.width/2) * SYMBOL_LINE_WIDTH;
+        [stripes stroke];
+        
+        CGContextRestoreGState(UIGraphicsGetCurrentContext());
     }else{
         [[self symbolColor] setFill];
         [symbol fill];
@@ -135,20 +155,27 @@
     
     [self symbolShading:diamond];
     [diamond stroke];
-
+    
 }
 
 - (void)drawSquiggleAtPoint:(CGPoint)point
 {
     UIBezierPath *squiggle = [[UIBezierPath alloc] init];
-    int currWidth = 70;
-    int currHeight = 100;
     
-    [squiggle moveToPoint:point];
-    [squiggle addCurveToPoint:CGPointMake(point.x+(50 * self.bounds.size.width / currWidth), point.y+(30 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(point.x+(25 * self.bounds.size.width / currWidth), point.y+(15 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(point.x+(35 * self.bounds.size.width / currWidth), point.y+(35 * self.bounds.size.height / currHeight))];
-    [squiggle addQuadCurveToPoint:CGPointMake(point.x+(60 * self.bounds.size.width / currWidth),point.y+(50 * self.bounds.size.height / currHeight)) controlPoint:CGPointMake(point.x+(80 * self.bounds.size.width / currWidth), point.y+(22 * self.bounds.size.height / currHeight))];
-    [squiggle addCurveToPoint:CGPointMake(point.x+(20 * self.bounds.size.width / currWidth), point.y+(50 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(point.x+(45 * self.bounds.size.width / currWidth), point.y+(55 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(point.x+(35 * self.bounds.size.width / currWidth), point.y+(35 * self.bounds.size.height / currHeight))];
-    [squiggle addQuadCurveToPoint:CGPointMake(point.x+(10 * self.bounds.size.width / currWidth), point.y+(30 * self.bounds.size.height / currHeight)) controlPoint:CGPointMake(point.x, point.y+(60 * self.bounds.size.height / currHeight))];
+    [squiggle moveToPoint:CGPointMake(point.x+[self symbolWidth]*0.15, point.y+[self symbolHeight]*0.25)];
+    [squiggle addQuadCurveToPoint:CGPointMake(point.x+[self symbolWidth]*0.05, point.y-[self symbolHeight]*0.65)
+                     controlPoint:CGPointMake(point.x-[self symbolWidth]*0.30, point.y+[self symbolHeight]*0.25)];
+    [squiggle addCurveToPoint:CGPointMake(point.x+[self symbolWidth]*0.75, point.y-[self symbolHeight]*0.8)
+                controlPoint1:CGPointMake(point.x+[self symbolWidth]*0.50, point.y-[self symbolHeight])
+                controlPoint2:CGPointMake(point.x+[self symbolWidth]*0.10, point.y+[self symbolHeight]*0.2)];
+    [squiggle addQuadCurveToPoint:CGPointMake(point.x+[self symbolWidth]*0.9, point.y+[self symbolHeight]*0.2)
+                     controlPoint:CGPointMake(point.x+[self symbolWidth]*1.30, point.y-[self symbolHeight])];
+    [squiggle addCurveToPoint:CGPointMake(point.x+[self symbolWidth]*0.15, point.y+[self symbolHeight]*0.25)
+                controlPoint1:CGPointMake(point.x+[self symbolWidth]*0.35, point.y-[self symbolHeight]*0.6)
+                controlPoint2:CGPointMake(point.x+[self symbolWidth]*0.15, point.y+[self symbolHeight]*0.6)];
+    //
+    //[squiggle addCurveToPoint:CGPointMake(point.x+(20 * self.bounds.size.width / currWidth), point.y+(50 * self.bounds.size.height / currHeight)) controlPoint1:CGPointMake(point.x+(45 * self.bounds.size.width / currWidth), point.y+(55 * self.bounds.size.height / currHeight)) controlPoint2:CGPointMake(point.x+(35 * self.bounds.size.width / currWidth), point.y+(35 * self.bounds.size.height / currHeight))];
+    //[squiggle addQuadCurveToPoint:CGPointMake(point.x+(10 * self.bounds.size.width / currWidth), point.y+(30 * self.bounds.size.height / currHeight)) controlPoint:CGPointMake(point.x, point.y+(60 * self.bounds.size.height / currHeight))];
     
     [self symbolShading:squiggle];
     [squiggle stroke];
